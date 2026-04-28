@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emby-server
+  labels:
+    app: emby-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emby-server
+  template:
+    metadata:
+      labels:
+        app: emby-server
+    spec:
+      containers:
+        - name: emby
+          image: emby/embyserver:latest
+          ports:
+            - containerPort: 8096
+          volumeMounts:
+            - name: dados
+              mountPath: /mnt/dados
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: dados
+          hostPath:
+            path: /DADOS
+            type: Directory
+        - name: config
+          hostPath:
+            path: /DADOS/emby-config
+            type: DirectoryOrCreate
