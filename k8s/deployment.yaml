@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emby-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emby-server
+  template:
+    metadata:
+      labels:
+        app: emby-server
+    spec:
+      containers:
+      - name: emby
+        image: linuxserver/emby:latest
+        ports:
+        - containerPort: 8096
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: emby-config-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: media-data-pvc
