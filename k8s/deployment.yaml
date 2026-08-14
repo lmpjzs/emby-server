@@ -32,6 +32,5 @@ spec:
         persistentVolumeClaim:
           claimName: emby-config-pvc
       - name: data
-        hostPath:
-          path: /DADOS/TORRENT
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: media-data-pvc
